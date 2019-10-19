@@ -66,18 +66,7 @@ function initSwinger() {
 
 document.addEventListener('readystatechange', function() {
     if(document.readyState === 'complete') {
-        if(process.platform != 'win32') { // TODO : Phase Beta (Only Windows)
-            setOverlayContent('Système d\'exploitation non pris en charge',
-            'Pendant la phase de beta du launcher, seul Windows est pris en charge.',
-            'Fermer le launcher');
-            toggleOverlay(true);
-            setCloseHandler(() => {
-                closeLauncher();
-            });
-        }
-        else {
-            initLauncher();
-        }
+        initLauncher();
     }
 }, false);
 
@@ -377,7 +366,7 @@ function downloadJava() {
             });
         }
     });
-    javaAssetEx.send({task: 'execute', function: 'validateJava', argsArr: [ConfigManager.getWorkingDirectory()]});
+    javaAssetEx.send({task: 'execute', function: 'validateJava', argsArr: []});
 }
 
 function onValidateJava() {
@@ -419,7 +408,7 @@ document.addEventListener('keydown', function (e) {
         let window = remote.getCurrentWindow();
         window.toggleDevTools({mode:'undocked'});
     }
-    else if(isDev && (e.key === 'R' || e.key === 'r')) {
+    else if(isDev && ((e.key === 'R' || e.key === 'r') && e.ctrlKey && e.shiftKey)) {
         let window = remote.getCurrentWindow();
         window.reload();
     }

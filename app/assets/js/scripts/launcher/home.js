@@ -233,15 +233,18 @@ function gameUpdate() {
                     proc.stdout.removeListener('data', tempListener);
                     proc.stderr.removeListener('data', gameErrorListener);
 
-                    if(ConfigManager.getLauncherConfigKeepOpen() == 'false'){
+                    const window = remote.getCurrentWindow();
+                    window.hide();
+
+                    /*if(ConfigManager.getLauncherConfigKeepOpen() == 'false'){
                         const window = remote.getCurrentWindow();
                         window.hide();
                         console.log('Fenêtre du launcher fermée pendant l\'execution du jeu.');
-                    }else{
-                        gameCloseListener(0,0);
-                        $("#launcher-home-play-button").attr("disabled", true);
                     }
-                    
+                    else{
+                        gameCloseListener(0, 0);
+                        $("#launcher-home-play-button").attr("disabled", true);
+                    }*/
                 }
             }
             

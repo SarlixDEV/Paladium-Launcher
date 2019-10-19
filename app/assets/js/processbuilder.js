@@ -260,35 +260,46 @@ class ProcessBuilder {
             }
             else {
                 // Extract the native library.
-                const exclusionArr = lib.extract != null ? lib.extract.exclude : ['META-INF/'];
-                const artifact = lib.downloads.classifiers[lib.natives[Library.mojangFriendlyOS()].replace('${arch}', process.arch.replace('x', ''))];
+                if (lib.natives[Library.mojangFriendlyOS()] == undefined) {
+                    logger.warn('Skip missing platform native:', lib.name);
+                }
+                else {
+                    const exclusionArr = lib.extract != null ? lib.extract.exclude : ['META-INF/'];
+                    const classifier = lib.natives[Library.mojangFriendlyOS()].replace('${arch}', process.arch.replace('x', ''))
+                    const artifact = lib.downloads.classifiers[classifier];
+                    
+                    if (artifact == undefined) {
+                        logger.warn('Skip missing platform native:', lib.name, classifier);
+                    } 
+                    else {
+                        // Location of native zip.
+                        const to = path.join(this.libPath, artifact.path);
 
-                // Location of native zip.
-                const to = path.join(this.libPath, artifact.path);
+                        let zip = new AdmZip(to);
+                        let zipEntries = zip.getEntries();
 
-                let zip = new AdmZip(to);
-                let zipEntries = zip.getEntries();
+                        // Unzip the native zip.
+                        for(let i = 0; i < zipEntries.length; i++) {
+                            const fileName = zipEntries[i].entryName;
 
-                // Unzip the native zip.
-                for(let i = 0; i < zipEntries.length; i++) {
-                    const fileName = zipEntries[i].entryName;
+                            let shouldExclude = false;
 
-                    let shouldExclude = false;
+                            // Exclude noted files.
+                            exclusionArr.forEach(function(exclusion) {
+                                if(fileName.indexOf(exclusion) > -1) {
+                                    shouldExclude = true;
+                                }
+                            })
 
-                    // Exclude noted files.
-                    exclusionArr.forEach(function(exclusion) {
-                        if(fileName.indexOf(exclusion) > -1) {
-                            shouldExclude = true;
-                        }
-                    })
-
-                    // Extract the file.
-                    if(!shouldExclude) {
-                        fs.writeFile(path.join(tempNativePath, fileName), zipEntries[i].getData(), (err) => {
-                            if(err) {
-                                logger.error('Error while extracting native library:', err);
+                            // Extract the file.
+                            if(!shouldExclude) {
+                                fs.writeFile(path.join(tempNativePath, fileName), zipEntries[i].getData(), (err) => {
+                                    if(err) {
+                                        logger.error('Error while extracting native library:', err);
+                                    }
+                                });
                             }
-                        });
+                        }   
                     }
                 }
             }

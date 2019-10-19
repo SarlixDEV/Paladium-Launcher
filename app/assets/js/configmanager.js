@@ -45,7 +45,7 @@ const DEFAULT_CONFIG = {
     settings: {
         launcher: {
             distroCustom: 'false',
-            distroURL: null, 
+            distroURL: null,
             keepLauncherOpen : 'false'
         },
         java: {

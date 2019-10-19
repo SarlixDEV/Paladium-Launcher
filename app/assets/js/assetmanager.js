@@ -102,13 +102,13 @@ class JavaManager extends EventEmitter {
 
     static isJavaExecPath(pth) {
         if(process.platform === 'win32') {
-            return pth.endsWith(path.join('bin', 'javaw.exe'));
+            return pth.toString().endsWith(path.join('bin', 'javaw.exe'));
         } 
         else if(process.platform === 'darwin') {
-            return pth.endsWith(path.join('bin', 'java'));
+            return pth.toString().endsWith(path.join('bin', 'java'));
         } 
         else if(process.platform === 'linux') {
-            return pth.endsWith(path.join('bin', 'java'));
+            return pth.toString().endsWith(path.join('bin', 'java'));
         }
         return false;
     }
@@ -805,7 +805,6 @@ class AssetManager extends EventEmitter {
 
         const homeSet = new Set([...pathSet1, ...pathSet2]);
 
-        // Validate JAVA_HOME.
         const jHome = JavaManager._scanJavaHome();
         if(jHome != null && jHome.indexOf('(x86)') === -1) {
             homeSet.add(jHome);
@@ -822,18 +821,56 @@ class AssetManager extends EventEmitter {
     }
 
     async _darwinJavaValidate(workingDir) {
-        // Soon update (After Beta windows)
+        const pathSet1 = await JavaManager._scanFileSystem('/Library/Java/JavaVirtualMachines');
+        const pathSet2 = await JavaManager._scanFileSystem(path.join(workingDir, 'runtime', 'x64'));
+
+        const homeSet = new Set([...pathSet1, ...pathSet2]);
+
+        let jHome = JavaManager._scanJavaHome();
+        if(jHome != null) {
+            // Ensure we are at the absolute root.
+            if(jHome.contains('/Contents/Home')){
+                jHome = jHome.substring(0, jHome.indexOf('/Contents/Home'));
+            }
+            homeSet.add(jHome);
+        }
+
+        let pathArr = await this._validateJavaRootSet(homeSet);
+
+        if(pathArr.length > 0) {
+            return pathArr[0].execPath;
+        } 
+        else {
+            return null;
+        }
     }
 
     async _linuxJavaValidate(workingDir) {
-        // Soon update (After Beta windows)
+        const pathSet1 = await JavaManager._scanFileSystem('/usr/lib/jvm');
+        const pathSet2 = await JavaManager._scanFileSystem(path.join(workingDir, 'runtime', 'x64'));
+        
+        const uberSet = new Set([...pathSet1, ...pathSet2]);
+
+        const jHome = JavaManager._scanJavaHome();
+        if(jHome != null) {
+            uberSet.add(jHome);
+        }
+        
+        let pathArr = await this._validateJavaRootSet(uberSet);
+
+        if(pathArr.length > 0) {
+            return pathArr[0].execPath;
+        } 
+        else {
+            return null;
+        }
     }
 
     async validateLocalJava(workingDir) {
         return await this['_' + process.platform + 'JavaValidate'](workingDir);
     }
 
-    async validateJava(workingDir) {
+    async validateJava() {
         if(!ConfigManager.isLoaded()){
             ConfigManager.load()
         }

@@ -4,7 +4,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/build-dev-red.svg?style=for-the-badge" alt="build">
-    <img src="https://img.shields.io/badge/version-v0.0.01--d9-red.svg?style=for-the-badge" alt="version"> 
+    <img src="https://img.shields.io/badge/version-v0.0.01--d10-red.svg?style=for-the-badge" alt="version"> 
     <img src="https://img.shields.io/badge/dist-windows-blue.svg?style=for-the-badge" alt="distribution">
 </p>
 
@@ -13,7 +13,6 @@
 ## Nouveauté
 
 * Le launcher passe en Open Source ♡＾▽＾♡
-<br>N'hésitez pas à me contacter (Chaika#4451) ou faire des propositions de commit afin d'améliorer le launcher.
 
 Toutes les nouveautés concernant les builds du launcher se font ici!
 
@@ -24,10 +23,10 @@ Toutes les nouveautés concernant les builds du launcher se font ici!
 Toutes les versions du launcher sont disponible dans [GitHub Releases](https://github.com/Chaika9/paladiumlauncher/releases)
 
 #### Dernière Release
-[![](https://img.shields.io/badge/release-v0.0.01--d9-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
+[![](https://img.shields.io/badge/release-v0.0.01--d10-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
 
 #### Dernière Pre-Release
-[![](https://img.shields.io/badge/release-v0.0.01--d9-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
+[![](https://img.shields.io/badge/release-v0.0.01--d10-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
 
 **Plateformes supportées**
 
@@ -41,7 +40,7 @@ Toutes les versions du launcher sont disponible dans [GitHub Releases](https://g
 
 Le launcher de Paladium est un projet Open-Source, initié par Chaika, développeur sur Paladium.  
 Par conséquent, il est ouvert aux contributions externes.  
-Toutefois, si vous souhaitez contribuer, vous devez **impérativement** rejoindre le serveur Discord de développement: https://discord.gg/nug6yB7  
+Toutefois, si vous souhaitez contribuer, vous devez **impérativement** rejoindre le serveur Discord de développement: https://discord.gg/yv6gSUb  
   
 Plus d'informations sont disponibles sur ce serveur, dans le channel #devenir-contributeur.
 
