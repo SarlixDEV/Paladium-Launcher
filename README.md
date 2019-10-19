@@ -5,7 +5,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/build-dev-red.svg?style=for-the-badge" alt="build">
     <img src="https://img.shields.io/badge/version-v0.0.01--d12-red.svg?style=for-the-badge" alt="version"> 
-    <img src="https://img.shields.io/badge/dist-windows-blue.svg?style=for-the-badge" alt="distribution">
+    <img src="https://img.shields.io/badge/dist-windows,%20linux-blue.svg?style=for-the-badge" alt="distribution">
 </p>
 
 <p align="center">Paladium Launcher - Beta</p>
@@ -34,7 +34,7 @@ Toutes les versions du launcher sont disponible dans [GitHub Releases](https://g
 | -------- | ---- |
 | Windows x64 | `paladiumlauncher-setup-VERSION.exe` |
 | macOS | `non disponible (en cours)` |
-| Linux x64 | `electronlauncher-VERSION-x86_64.AppImage` |
+| Linux x64 | `paladiumlauncher-VERSION-x86_64.AppImage` |
 
 ## Contribution
 
