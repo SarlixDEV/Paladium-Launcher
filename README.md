@@ -4,7 +4,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/build-dev-red.svg?style=for-the-badge" alt="build">
-    <img src="https://img.shields.io/badge/version-v0.0.01--d11-red.svg?style=for-the-badge" alt="version"> 
+    <img src="https://img.shields.io/badge/version-v0.0.01--d12-red.svg?style=for-the-badge" alt="version"> 
     <img src="https://img.shields.io/badge/dist-windows-blue.svg?style=for-the-badge" alt="distribution">
 </p>
 
@@ -23,10 +23,10 @@ Toutes les nouveautés concernant les builds du launcher se font ici!
 Toutes les versions du launcher sont disponible dans [GitHub Releases](https://github.com/Chaika9/paladiumlauncher/releases)
 
 #### Dernière Release
-[![](https://img.shields.io/badge/release-v0.0.01--d11-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
+[![](https://img.shields.io/badge/release-v0.0.01--d12-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
 
 #### Dernière Pre-Release
-[![](https://img.shields.io/badge/release-v0.0.01--d11-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
+[![](https://img.shields.io/badge/release-v0.0.01--d12-red.svg?style=for-the-badge)](https://github.com/Chaika9/paladiumlauncher/releases/latest)
 
 **Plateformes supportées**
 
@@ -34,7 +34,7 @@ Toutes les versions du launcher sont disponible dans [GitHub Releases](https://g
 | -------- | ---- |
 | Windows x64 | `paladiumlauncher-setup-VERSION.exe` |
 | macOS | `non disponible (en cours)` |
-| Linux x64 | `non disponible (en cours)` |
+| Linux x64 | `electronlauncher-VERSION-x86_64.AppImage` |
 
 ## Contribution
 
@@ -95,7 +95,7 @@ Build pour une plateforme spécifique :
 | ----------- | -------------------- |
 | Windows x64 | `npm run dist:win`   |
 | macOS       | `non disponible (en cours)`   |
-| Linux x64   | `non disponible (en cours)` |
+| Linux x64   | `npm run dist:linux` |
 
 ---
 **Aide projet**

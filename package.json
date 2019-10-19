@@ -13,12 +13,12 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "cilinux": "electron-builder --linux --win",
-    "cidarwin": "electron-builder --mac",
-    "dist": "cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder",
-    "dist:win": "npm run dist -- --win --x64",
-    "dist:mac": "npm run dist -- --mac",
-    "dist:linux": "npm run dist -- --linux --x64",
+    "cilinux": "node build.js WINDOWS && node build.js LINUX",
+    "cidarwin": "node build.js MAC",
+    "dist": "cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true node build.js",
+    "dist:win": "npm run dist -- WINDOWS",
+    "dist:mac": "npm run dist -- MAC",
+    "dist:linux": "npm run dist -- LINUX",
     "lint": "eslint --config .eslintrc.json ."
   },
   "engines": {
@@ -48,58 +48,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Chaika9/paladiumlauncher.git"
-  },
-  "build": {
-    "appId": "paladiumlauncher",
-    "productName": "Paladium Launcher",
-    "artifactName": "${productName}.${ext}",
-    "copyright": "Copyright © 2019 Paladium",
-    "directories": {
-      "buildResources": "build",
-      "output": "dist"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": "x64"
-        }
-      ],
-      "icon": "build/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "allowToChangeInstallationDirectory": true
-    },
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.games",
-      "icon": "build/icon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "maintainer": "Chaika9",
-      "vendor": "Paladium",
-      "synopsis": "Paladium Launcher",
-      "description": "Paladium Launcher",
-      "category": "Game"
-    },
-    "deb": {
-      "compression": "xz",
-      "packageCategory": "Games",
-      "priority": "optional"
-    },
-    "compression": "maximum",
-    "files": [
-      "!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.travis.yml,.nvmrc,.eslintrc.json}"
-    ],
-    "extraResources": [],
-    "asar": true
   }
 }
