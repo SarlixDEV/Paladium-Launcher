@@ -20,7 +20,7 @@ const loggerLauncher = LoggerUtil('%c[Launcher]', 'color: #000668; font-weight: 
 const loggerSwinger = LoggerUtil('%c[Swinger]', 'color: #000668; font-weight: bold');
 const loggerAutoUpdater = LoggerUtil('%c[AutoUpdater]', 'color: #209b07; font-weight: bold');
 
-const launcherVersion = "0.0.01-d10";
+const launcherVersion = "0.0.01-d11";
 
 loggerLauncher.log('Paladium Launcher (v' + launcherVersion + ") started on " + Library.mojangFriendlyOS() + "..");
 
@@ -148,7 +148,7 @@ function onDistroLoad(data) {
             case 'update-available': {
                 loggerAutoUpdater.log('New update available:', info.version);
 
-                if(!forceUpdate) {
+                if(!forceUpdate && process.platform != 'linux') {
                     setOverlayContent('Mise à jour du launcher disponible 😘',
                         'Une nouvelle mise à jour pour le launcher est disponible.' 
                         + '<br>Voulez-vous l\'installer maintenant ?',
@@ -183,7 +183,16 @@ function onDistroLoad(data) {
                         });
                     }
                     else {
-                        console.log("Linux!");
+                        setOverlayContent('Mise à jour du launcher disponible 😘',
+                            'Une nouvelle mise à jour pour le launcher est disponible.' 
+                            + '<br>Vous pouvez la télécharger sur le site officiel de Paladium.'
+                            + '<br><br><i class="fas fa-chevron-right"></i> Cette mise à niveau est obligatoire pour pouvoir continuer.',
+                            'Fermer le launcher');
+                        toggleOverlay(true);
+                        setCloseHandler(() => {
+                            toggleOverlay(false);
+                            closeLauncher();
+                        });
                     }
                 }
                 break;
@@ -192,7 +201,7 @@ function onDistroLoad(data) {
                 if((version.build < versionMin.build) || (version.update < versionMin.update) || (version.minor < versionMin.minor) || (version.major < versionMin.major)) {
                     setOverlayContent('Launcher obselète',
                             'Votre launcher est obselète !' 
-                            + '<br><br><i class="fas fa-chevron-right"></i> Merci de télécharger le launcher sur le site officiel de Paladium.',
+                            + '<br><br><i class="fas fa-chevron-right"></i> Merci de retélécharger le launcher sur le site officiel de Paladium.',
                             'Fermer le launcher');
                         toggleOverlay(true);
                         setCloseHandler(() => {
