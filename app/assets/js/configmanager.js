@@ -10,7 +10,7 @@ const path = require('path');
 const logger = require('./loggerutil')('%c[ConfigManager]', 'color: #a02d2a; font-weight: bold');
 
 const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME);
-const workingPath = workingPath = path.join(sysRoot, '.paladium');
+const workingPath = path.join(sysRoot, '.paladium');
 
 exports.getWorkingDirectory = function() {
     return workingPath;
@@ -53,19 +53,14 @@ const DEFAULT_CONFIG = {
             maxRAM: resolveMaxRAM(),
             executable: null,
             jvmOptions: [
-                '-Djava.awt.headless=true',
-                '-Dfile.encoding=UTF-8',
-                '-XX:NewSize=256m',
-                '-XX:MaxNewSize=256m',
-                '-XX:PermSize=256m',
-                '-XX:MaxPermSize=256m',
-                '-XX:+DisableExplicitGC', // TODO : Test new args java
-
-                '-XX:+UseConcMarkSweepGC',
-                '-XX:+CMSIncrementalMode',
-                '-XX:-UseAdaptiveSizePolicy',
+                '-XX:+UnlockExperimentalVMOptions',
+                '-XX:+UseG1GC',
+                '-XX:G1NewSizePercent=20',
+                '-XX:G1ReservePercent=20',
+                '-XX:MaxGCPauseMillis=50',
+                '-XX:G1HeapRegionSize=32M',
                 '-Xmn128M'
-            ],
+            ]
         }
     },
     clientToken: null,
@@ -77,7 +72,7 @@ const DEFAULT_CONFIG = {
 let config = null;
 
 /**
- * Save the current configuration to a file.
+ * Save the current configuration to a file. 
  */
 exports.save = function() {
     fs.writeFileSync(configPath, JSON.stringify(config, null, 4), 'UTF-8');
@@ -92,7 +87,7 @@ exports.load = function() {
 
     if(!fs.existsSync(configPath)) {
         fs.ensureDirSync(path.join(configPath, '..'));
-
+        
         doLoad = false;
         config = DEFAULT_CONFIG;
         exports.save();
@@ -103,7 +98,7 @@ exports.load = function() {
         try {
             config = JSON.parse(fs.readFileSync(configPath, 'UTF-8'));
             doValidate = true;
-        }
+        } 
         catch (err) {
             logger.error(err);
             logger.log('Configuration file contains malformed JSON or is corrupt.');
@@ -139,7 +134,7 @@ function validateKeySet(srcObj, destObj) {
     for(let i=0; i < keys.length; i++) {
         if(typeof destObj[keys[i]] === 'undefined') {
             destObj[keys[i]] = srcObj[keys[i]];
-        }
+        } 
         else if(typeof srcObj[keys[i]] === 'object' && srcObj[keys[i]] != null && !(srcObj[keys[i]] instanceof Array) && validationBlacklist.indexOf(keys[i]) === -1) {
             destObj[keys[i]] = validateKeySet(srcObj[keys[i]], destObj[keys[i]]);
         }
@@ -230,7 +225,7 @@ exports.removeAuthAccount = function(uuid) {
             const keys = Object.keys(config.authenticationDatabase);
             if(keys.length > 0){
                 config.selectedAccount = keys[0];
-            }
+            } 
             else {
                 config.selectedAccount = null;
                 config.clientToken = null;
