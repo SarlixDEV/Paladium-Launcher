@@ -38,7 +38,7 @@ Toutes les versions du launcher sont disponible dans [GitHub Releases](https://g
 
 ## Contribution
 
-Le launcher de Paladium est un projet Open-Source, initié par Chaika, développeur sur Paladium.  
+Le launcher de Paladium est un projet Open-Source, initié par Chaika9, développeur sur Paladium.  
 Par conséquent, il est ouvert aux contributions externes.  
 Toutefois, si vous souhaitez contribuer, vous devez **impérativement** rejoindre le serveur Discord de développement: https://discord.gg/yv6gSUb  
   
