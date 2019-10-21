@@ -1,3 +1,8 @@
+/**
+ * Paladium Launcher - https://github.com/Chaika9/paladiumlauncher
+ * Copyright (C) 2019 Paladium
+ */
+
 #login-view {
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/login/background.png');
     background-size: cover;

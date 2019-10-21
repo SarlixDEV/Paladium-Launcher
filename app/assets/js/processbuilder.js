@@ -165,18 +165,6 @@ class ProcessBuilder {
         
         args = args.concat(ConfigManager.getJVMOptions());
 
-        /*if(process.platform === 'darwin') {
-            args.push("-XX:+UnlockExperimentalVMOptions");
-            args.push("-XX:+UseG1GC");
-            args.push("-XX:G1NewSizePercent=20");
-            args.push("-XX:G1ReservePercent=20");
-            args.push("-XX:MaxGCPauseMillis=50");
-            args.push("-XX:G1HeapRegionSize=32M");
-        } 
-        else {
-            args = args.concat(ConfigManager.getJVMOptions());
-        }*/
-
         args.push(this.forgeData.mainClass);
         args = args.concat(this._resolveForgeArgs());
         return args;
