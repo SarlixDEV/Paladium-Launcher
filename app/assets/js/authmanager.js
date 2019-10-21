@@ -11,11 +11,14 @@ const logger = require('./loggerutil')('%c[AuthManager]', 'color: #a02d2a; font-
 exports.addAccount = async function(username, password) {
     try {
         const session = await Mojang.authenticate(username, password, ConfigManager.getClientToken());
+        
         if(session.selectedProfile != null) {
             const ret = ConfigManager.addAuthAccount(session.selectedProfile.id, session.accessToken, username, session.selectedProfile.name);
+
             if(ConfigManager.getClientToken() == null) {
                 ConfigManager.setClientToken(session.clientToken);
             }
+
             ConfigManager.save();
             return ret;
         } 
@@ -32,8 +35,10 @@ exports.removeAccount = async function(uuid) {
     try {
         const authAcc = ConfigManager.getAuthAccount(uuid);
         await Mojang.invalidate(authAcc.accessToken, ConfigManager.getClientToken());
+
         ConfigManager.removeAuthAccount(uuid);
         ConfigManager.save();
+
         return Promise.resolve();
     } 
     catch (err){

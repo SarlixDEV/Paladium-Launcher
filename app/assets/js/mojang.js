@@ -134,22 +134,22 @@ exports.authenticate = function(username, password, clientToken, requestUser = t
 exports.validate = function(accessToken, clientToken) {
     return new Promise((resolve, reject) => {
         request.post(authpath + '/validate', {
-                json: true,
-                body: {
-                    accessToken,
-                    clientToken
-                }
-            },
-            function(error, response, body) {
-                if(error) {
-                    logger.error('Error during validation.', error);
-                    reject(error);
+            json: true,
+            body: {
+                accessToken,
+                clientToken
+            }
+        },
+        function(error, response, body) {
+            if(error) {
+                logger.error('Error during validation.', error);
+                reject(error);
+            } 
+            else {
+                if(response.statusCode === 403) {
+                    resolve(false);
                 } 
                 else {
-                    if(response.statusCode === 403) {
-                        resolve(false);
-                    } 
-                    else {
                     // 204 if valid
                     resolve(true);
                 }

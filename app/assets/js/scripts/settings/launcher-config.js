@@ -12,26 +12,27 @@
  function initSettingsLauncherConfigTab() {
     $initSettingsLauncherConfigGameDirectoryTextField.val(ConfigManager.getWorkingDirectory());
 }
+
 //Game Directory
 $($initSettingsLauncherConfigGameDirectoryOpenButton).click(function() {
     shell.openExternal($initSettingsLauncherConfigGameDirectoryTextField.val());
 });
 
-//Keep Launcher Open While Game iS Running
+//Keep Launcher Open While Game is Running
 function initSettingsLauncherOptionsTab(){
     if (ConfigManager.getLauncherConfigKeepOpen()){
         $initSettingsLauncherConfigKeepLauncherOpenButton.attr('checked', 'checked');
-    }else{
+    }
+    else {
         $initSettingsLauncherConfigKeepLauncherOpenButton.removeAttr('checked');
     }
 }
 $initSettingsLauncherConfigKeepLauncherOpenButton.click(function(e){
-    //e.preventDefault();
-    
     if($(this).prop('checked')){
         ConfigManager.setLauncherConfigKeepOpen('true');
 
-    }else{     
+    }
+    else {     
         ConfigManager.setLauncherConfigKeepOpen('false');
     }
 });

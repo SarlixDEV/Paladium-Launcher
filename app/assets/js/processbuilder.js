@@ -134,6 +134,7 @@ class ProcessBuilder {
         child.stderr.on('data', (data) => {
             loggerMCstderr.log(data);
         });
+
         child.on('close', (code, signal) => {
             logger.log('Exited with code', code);
             fs.remove(tempNativePath, (err) => {
@@ -150,7 +151,7 @@ class ProcessBuilder {
 
     constructJVMArguments(tempNativePath) {
         let args = [];
-
+        
         args.push('-cp');ConfigManager.getCommonDirectory()
         args.push(this.classpathArg(tempNativePath).join(process.platform === 'win32' ? ';' : ':'));
 

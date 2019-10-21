@@ -56,9 +56,11 @@ class Library extends Asset {
         for(let rule of rules) {
             const action = rule.action;
             const osProp = rule.os;
+
             if(action != null && osProp != null) {
                 const osName = osProp.name;
                 const osMoj = Library.mojangFriendlyOS();
+
                 if(action === 'allow') {
                     return osName === osMoj;
                 } 
@@ -117,6 +119,7 @@ class JavaManager extends EventEmitter {
         return new Promise((resolve, reject) => {
             fs.exists(scanDir, (e) => {
                 let res = new Set();
+                
                 if(e) {
                     fs.readdir(scanDir, (err, files) => {
                         if(err) {
@@ -125,6 +128,7 @@ class JavaManager extends EventEmitter {
                         } 
                         else {
                             let pathsDone = 0;
+
                             for(let i = 0; i < files.length; i++) {
                                 const combinedPath = path.join(scanDir, files[i]);
                                 const execPath = JavaManager.javaExecFromRoot(combinedPath);
@@ -141,6 +145,7 @@ class JavaManager extends EventEmitter {
                                     }
                                 });
                             }
+
                             if(pathsDone === files.length) {
                                 resolve(res);
                             }
@@ -156,6 +161,7 @@ class JavaManager extends EventEmitter {
 
     static parseJavaRuntimeVersion(verString) {
         const major = verString.split('.')[0];
+        
         if(major == 1) {
             return JavaManager._parseJavaRuntimeVersion_8(verString);
         }
@@ -261,14 +267,17 @@ class AssetManager extends EventEmitter {
     _parseDistroModules(modules, version, instanceid) {
         let alist = [];
         let asize = 0;
+
         for(let ob of modules) {
             let obArtifact = ob.getArtifact();
             let obPath = obArtifact.getPath();
             let artifact = new DistroModule(ob.getIdentifier(), obArtifact.getHash(), obArtifact.getSize(), obArtifact.getURL(), obPath, ob.getType());
             const validationPath = obPath.toLowerCase().endsWith('.pack.xz') ? obPath.substring(0, obPath.toLowerCase().lastIndexOf('.pack.xz')) : obPath;
+
             if(!AssetManager._validateLocal(validationPath, 'MD5', artifact.hash)) {
                 asize += artifact.size * 1;
                 alist.push(artifact);
+
                 if(validationPath !== obPath) {
                     this.extractQueue.push(obPath);
                 }
@@ -276,6 +285,7 @@ class AssetManager extends EventEmitter {
             // Recursively process the submodules then combine the results.
             if(ob.getSubModules() != null) {
                 let dltrack = this._parseDistroModules(ob.getSubModules(), version, instanceid);
+
                 asize += dltrack.dlsize*1;
                 alist = alist.concat(dltrack.dlqueue);
             }
@@ -293,6 +303,7 @@ class AssetManager extends EventEmitter {
                 //This download will never be tracked as it's essential and trivial.
                 console.log('Preparing download of ' + version + ' assets.');
                 fs.ensureDirSync(versionPath);
+
                 const stream = request(url).pipe(fs.createWriteStream(versionFile));
                 stream.on('finish', () => {
                     resolve(JSON.parse(fs.readFileSync(versionFile)));
@@ -340,8 +351,8 @@ class AssetManager extends EventEmitter {
             const name = assetIndex.id + '.json';
             const indexPath = path.join(self.commonPath, 'assets', 'indexes');
             const assetIndexLoc = path.join(indexPath, name);
-
             let data = null;
+
             if(!fs.existsSync(assetIndexLoc) || force) {
                 console.log('Downloading ' + versionData.id + ' asset index.');
                 fs.ensureDirSync(indexPath);
@@ -378,10 +389,12 @@ class AssetManager extends EventEmitter {
             async.forEachOfLimit(indexData.objects, 10, (value, key, cb) => {
                 acc++;
                 self.emit('progress', 'assets', acc, total);
+
                 const hash = value.hash;
                 const assetName = path.join(hash.substring(0, 2), hash);
                 const urlName = hash.substring(0, 2) + '/' + hash;
                 const ast = new Asset(key, hash, value.size, resourceURL + urlName, path.join(objectPath, assetName));
+
                 if(!AssetManager._validateLocal(ast.to, 'sha1', ast.hash)) {
                     dlSize += (ast.size*1);
                     assetDlQueue.push(ast);
@@ -546,7 +559,6 @@ class AssetManager extends EventEmitter {
                         });
                         req.pipe(writeStream);
                         req.resume();
-
                     } 
                     else {
                         req.abort();
@@ -573,8 +585,6 @@ class AssetManager extends EventEmitter {
                     console.log('All ' + identifier + ' have been processed successfully');
                 }
 
-                //self.totaldlsize -= dlTracker.dlsize
-                //self.progress -= dlTracker.dlsize
                 self[identifier] = new DLTracker([], 0);
 
                 if(self.progress >= self.totaldlsize) {
@@ -592,12 +602,15 @@ class AssetManager extends EventEmitter {
         const self = this;
         return new Promise(async (resolve, reject) => {
             const modules = server.getModules();
+
             for(let ob of modules) {
                 const type = ob.getType();
+
                 if(type === DistroManager.Types.ForgeHosted || type === DistroManager.Types.Forge) {
                     let obArtifact = ob.getArtifact();
                     let obPath = obArtifact.getPath();
                     let asset = new DistroModule(ob.getIdentifier(), obArtifact.getHash(), obArtifact.getSize(), obArtifact.getURL(), obPath, type);
+
                     try {
                         let forgeData = await AssetManager._finalizeForgeAsset(asset, self.commonPath);
                         resolve(forgeData);
@@ -623,19 +636,18 @@ class AssetManager extends EventEmitter {
                         const forgeVersion = JSON.parse(zip.readAsText(zipEntries[i]));
                         const versionPath = path.join(commonPath, 'versions', forgeVersion.id);
                         const versionFile = path.join(versionPath, forgeVersion.id + '.json');
+
                         if(!fs.existsSync(versionFile)) {
                             fs.ensureDirSync(versionPath);
                             fs.writeFileSync(path.join(versionPath, forgeVersion.id + '.json'), zipEntries[i].getData());
                             resolve(forgeVersion);
                         } 
                         else {
-                            //Read the saved file to allow for user modifications.
                             resolve(JSON.parse(fs.readFileSync(versionFile, 'utf-8')));
                         }
                         return;
                     }
                 }
-                //We didn't find forge's version.json.
                 reject('Unable to finalize Forge processing, version.json not found! Has forge changed their format?');
             })
         })

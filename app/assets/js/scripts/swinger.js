@@ -540,7 +540,7 @@ function updateRangedSlider(element, value, notch) {
 function showLoading() {
     var splashes = [{text: "Chargement du menu de chargement", author: "Chaika9"}, {text: "Char...ge...ment en courssssss.....", author: "Chaika9"}, {text: "#On aime les chargements", author: "Chaika9"}];
 
-    var splashe_text = splashes[Math.floor(Math.random()*splashes.length)];
+    var splashe_text = splashes[Math.floor(Math.random() * splashes.length)];
     $("#loading-splash-text").html(splashe_text.text);
     $("#loading-sudmitted-author").html('@' + splashe_text.author);
 

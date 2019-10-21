@@ -33,6 +33,7 @@ module.exports = {
         client.on('data', (data) => {
             if(data != null && data != '') {
                 var server_info = data.toString().split("\x00\x00\x00");
+                
                 if(server_info != null && server_info.length >= 6) {
                     this.online = true;
                     this.version = server_info[2].replace(/\u0000/g, '');
@@ -51,11 +52,6 @@ module.exports = {
         client.on('timeout', () => {
             callback();
             client.end();
-            //process.exit();
-        });
-
-        client.on('end', () => {
-            // nothing needed here
         });
 
         client.on('error', (err) =>  {
