@@ -38,7 +38,7 @@ class ProcessBuilder {
                 var name = dir + '/' + files[i];
                 if(fs.statSync(name).isDirectory()) {
                     this._getFiles(name, files_);
-                } 
+                }
                 else {
                     files_.push(name);
                 }
@@ -62,7 +62,7 @@ class ProcessBuilder {
     replaceAll(str, find, replace) {
         return str.split(find).join(replace);
     }
-    
+
     build() {
         let files_ex = [];
         files_ex = files_ex.concat(this._getFiles(ConfigManager.getInstanceDirectory()));
@@ -80,7 +80,7 @@ class ProcessBuilder {
         for(let file of this._getFiles(path.join(this.gameDir, "resourcepacks"))) {
             files.push(file);
         }
-        
+
         for(let file of this._getFiles(path.join(this.gameDir, "shaderpacks"))) {
             files.push(file);
         }
@@ -89,7 +89,7 @@ class ProcessBuilder {
         for(let inst of instances) {
             for(let mdl of inst.getModules()) {
                 files.push(mdl.getArtifact().getPath());
-                
+
                 if(mdl.hasSubModules()) {
                     for(let sm of mdl.getSubModules()) {
                         files.push(sm.getArtifact().getPath(), '/');
@@ -109,7 +109,7 @@ class ProcessBuilder {
         const tempNativePath = path.join(os.tmpdir(), ConfigManager.getTempNativeFolder(), crypto.pseudoRandomBytes(16).toString('hex'));
 
         process.throwDeprecation = true;
-        
+
         let args = this.constructJVMArguments(tempNativePath);
 
         logger.log('Launch Arguments:', args);
@@ -138,7 +138,7 @@ class ProcessBuilder {
             fs.remove(tempNativePath, (err) => {
                 if(err) {
                     logger.warn('Error while deleting temp dir', err);
-                } 
+                }
                 else {
                     logger.log('Temp dir deleted successfully.');
                 }
@@ -150,18 +150,27 @@ class ProcessBuilder {
     constructJVMArguments(tempNativePath) {
         let args = [];
 
-        args.push('-cp');
+        args.push('-cp');ConfigManager.getCommonDirectory()
         args.push(this.classpathArg(tempNativePath).join(process.platform === 'win32' ? ';' : ':'));
 
         if(process.platform === 'darwin') {
             args.push('-Xdock:name=PaladiumLauncher');
             args.push('-Xdock:icon=' + path.join(__dirname, '..', 'images', 'minecraft.icns'));
         }
-        
+
         args.push('-Xmx' + ConfigManager.getMaxRAM());
         args.push('-Xms' + ConfigManager.getMinRAM());
-        args = args.concat(ConfigManager.getJVMOptions());
         args.push('-Djava.library.path=' + tempNativePath);
+        if(process.platform === 'darwin') {
+            args.push("-XX:+UnlockExperimentalVMOptions");
+            args.push("-XX:+UseG1GC");
+            args.push("-XX:G1NewSizePercent=20");
+            args.push("-XX:G1ReservePercent=20");
+            args.push("-XX:MaxGCPauseMillis=50");
+            args.push("-XX:G1HeapRegionSize=32M");
+        } else {
+            args = args.concat(ConfigManager.getJVMOptions());
+        }
 
         args.push(this.forgeData.mainClass);
         args = args.concat(this._resolveForgeArgs());
@@ -267,10 +276,10 @@ class ProcessBuilder {
                     const exclusionArr = lib.extract != null ? lib.extract.exclude : ['META-INF/'];
                     const classifier = lib.natives[Library.mojangFriendlyOS()].replace('${arch}', process.arch.replace('x', ''))
                     const artifact = lib.downloads.classifiers[classifier];
-                    
+
                     if (artifact == undefined) {
                         logger.warn('Skip missing platform native:', lib.name, classifier);
-                    } 
+                    }
                     else {
                         // Location of native zip.
                         const to = path.join(this.libPath, artifact.path);
@@ -299,7 +308,7 @@ class ProcessBuilder {
                                     }
                                 });
                             }
-                        }   
+                        }
                     }
                 }
             }
@@ -361,7 +370,7 @@ class ProcessBuilder {
             if(sm.getType() === DistroManager.Types.Library) {
                 libs.push(sm.getArtifact().getPath());
             }
-            
+
             if(mdl.hasSubModules()) {
                 const res = this._resolveModuleLibraries(sm);
                 if(res.length > 0) {
