@@ -47,7 +47,7 @@ function initAutoUpdater(event) {
 }
 
 function initialize() {
-    app.setName('Paladium Launcher');
+    //app.setName('Paladium Launcher');
     app.disableHardwareAcceleration();
 
 	if(makeSingleInstance()) {
@@ -109,10 +109,12 @@ function createWindow() {
         minWidth: 1280,
         minHeight: 720,
         icon: getPlatformIcon('icon'),
+        resizable: true,
         frame: false,
         webPreferences: {
             preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
             nodeIntegration: true,
+            webSecurity: true,
             contextIsolation: false
         },
         backgroundColor: '#2f2f2f'
@@ -124,8 +126,7 @@ function createWindow() {
         slashes: true
     }));
 
-    frame.setMenu(null);
-    frame.setResizable(true);
+    frame.removeMenu();
 
     frame.on('closed', () => {
         frame = null;

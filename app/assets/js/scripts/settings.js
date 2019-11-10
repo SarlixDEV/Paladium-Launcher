@@ -60,10 +60,22 @@ setupSettingsTabs();
  * Saves
  */
 $("#settings-save-button").click(function() {
+    savesSettings();
+});
+
+document.addEventListener('keydown', (e) => {
+    if(getCurrentView() === VIEWS.settings) {
+        if(e.key === 'Escape') {
+            switchView(getCurrentView(), VIEWS.launcher);
+        }
+    }
+});
+
+function savesSettings(){
     let maxRam = Number(settingsMaxRAMRange.getAttribute('value'));
     if(maxRam % 1 > 0) {
         maxRam = Math.round(maxRam * 1000) + 'M';
-    } 
+    }
     else {
         maxRam = Math.round(maxRam) + 'G';
     }
@@ -72,7 +84,7 @@ $("#settings-save-button").click(function() {
     let minRam = Number(settingsMinRAMRange.getAttribute('value'));
     if(minRam % 1 > 0) {
         minRam = Math.round(minRam * 1000) + 'M';
-    } 
+    }
     else {
         minRam = Math.round(minRam) + 'G';
     }
@@ -90,6 +102,5 @@ $("#settings-save-button").click(function() {
     }
 
     ConfigManager.save();
-
     switchView(getCurrentView(), VIEWS.launcher);
-});
+}
